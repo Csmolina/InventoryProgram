@@ -62,8 +62,6 @@ SearchInCart(product) //Searchs if the new product is already in cart, so its da
     {
         if(cart[i].item==product.item) //If the new product is already in cart, it only updates its values, so we don't see duplicates.
         {
-            console.log(product.quantity);
-            console.log(product.total);
             cart[i].quantity= +cart[i].quantity+ +product.quantity;
             cart[i].total= +cart[i].total+ +product.total;
             condition=true;
@@ -85,7 +83,6 @@ AddCart(nam,price,tax_status){ //Adds products in cart
     let quan=document.getElementById(nam).value
     if(quan>0)
     {
-        console.log(nam +" " +quan + " "+price);
         var total= (quan*price).toFixed(2);
         var new_product=new ProductCart(nam,quan,price,tax_status,total);
         inventoryobject.SearchInInventory(new_product);
@@ -93,26 +90,23 @@ AddCart(nam,price,tax_status){ //Adds products in cart
         {
             cart.push(new_product);
         }    
-        console.log(total)
         document.querySelector("#cart_table tbody").innerHTML = cart.map(cart => `<tr><td>${cart.item}</td><td>${cart.quantity}</td><td>${cart.price}</td><td>${cart.total}</td><td><input type="number" id=" ${cart.item}" name="articles"
-        min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('')
-    
+        min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('');
+        UpdateTotals();
     }
     }
 DeleteCart(nam,price){ //Deletes products in cart
-    console.log(cart)
     let quan= -(document.getElementById(" "+nam).value)
     var total= (quan*price).toFixed(2);
     var new_product=new ProductCart(nam,quan,price,"",total);
-    console.log(new_product)
     inventoryobject.SearchInInventory(new_product);
     if(!cartobject.SearchInCart(new_product))
     {
         cart.push(new_product);
     }    
-    console.log(total)
     document.querySelector("#cart_table tbody").innerHTML = cart.map(cart => `<tr><td>${cart.item}</td><td>${cart.quantity}</td><td>${cart.price}</td><td>${cart.total}</td><td><input type="number" id=" ${cart.item}" name="articles"
-    min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('')
+    min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('');
+    UpdateTotals();
 }
 EmptyCart() //Deletes all products in cart. However, the transaction is still running with the same costumer.
 {
@@ -121,8 +115,8 @@ EmptyCart() //Deletes all products in cart. However, the transaction is still ru
     cart=[];
     Choose_Member(typeofmember);
     document.querySelector("#cart_table tbody").innerHTML = cart.map(cart => `<tr><td>${cart.item}</td><td>${cart.quantity}</td><td>${cart.price}</td><td>${cart.total}</td><td><input type="number" id=" ${cart.item}" name="articles"
-    min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('')
-
+    min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('');
+    UpdateTotals();
 }
 
 }
@@ -164,8 +158,7 @@ class Total{ //Class for total values in the transaction.
     }
     Calculate_Saved(inventory,cart) //Calculates saved only on reward members, since they're having a discount. Regular costumers won't see this.
     {
-        console.log(inventory); //This calculates how much this transactions would've cost if the costumer was a regular one and compares it to the actual amount of the transaction.
-        console.log(cart);
+       //This calculates how much this transactions would've cost if the costumer was a regular one and compares it to the actual amount of the transaction.
         var saved=0.00;
         for(let i=0;i<cart.length;i++)
         {
@@ -206,7 +199,7 @@ function Choose_Member(id){ //Chooses if the costumer is a Reward Member or a Re
         document.querySelector('#regular').disabled = true;
         document.getElementById("costumer").innerHTML='Client is a Reward Member';
         document.querySelector("#myTable tbody").innerHTML = inventory.map(invent => `<tr><td>${invent.item}</td><td>${invent.quantity}</td><td>${invent.regular_price}</td><td>${invent.member_price}</td><td>${invent.tax_status}</td><td> <input type="number" id="${invent.item}" name="tentacles"
-    min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.member_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('')
+    min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.member_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('');
 
     }
         
@@ -215,12 +208,8 @@ function Choose_Member(id){ //Chooses if the costumer is a Reward Member or a Re
         document.querySelector('#reward').disabled = true;
         document.getElementById("costumer").innerHTML='Client is a Regular Costumer';
         document.querySelector("#myTable tbody").innerHTML = inventory.map(invent => `<tr><td>${invent.item}</td><td>${invent.quantity}</td><td>${invent.regular_price}</td><td>${invent.member_price}</td><td>${invent.tax_status}</td><td> <input type="number" id="${invent.item}" name="tentacles"
-    min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.regular_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('')
-
+    min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.regular_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('');
     }
-        
-    
-    
 }
 function Spaces(num) //Used for the transaction txt file. To show the products and their values, columns are separated by 40 charaters including data.
 {
@@ -229,17 +218,27 @@ function Spaces(num) //Used for the transaction txt file. To show the products a
  sp+=" ";
  return sp;
 }
-function Checkout() //This function is used to calculate the transaction's totals, set the new inventory.txt and creates the transaction txt file.
+function UpdateTotals()
 {
-    const d=new Date();
-    var calc_total=new Total();
     calc_total.cash=document.getElementById("cash").value;
     calc_total.totalitems=cart.length;
     calc_total.subtotal=calc_total.Calculate_Subtotal(cart);
     calc_total.tax=calc_total.Calculate_Tax(cart).toFixed(2);
     calc_total.total=calc_total.Calculate_Total().toFixed(2);
+    document.getElementById("totalitemsnumber").innerHTML  = String("TOTAL NUMBER OF ITEMS: "+ calc_total.totalitems); 
+    document.getElementById("subtotalitemsnumber").innerHTML  = String("SUBTOTAL: "+ calc_total.subtotal); 
+    document.getElementById("taxnumber").innerHTML  = String("TAX (6.5%): "+ calc_total.tax); 
+    document.getElementById("totalnumber").innerHTML  = String("TOTAL: "+ calc_total.total); 
+}
+function Checkout() //This function is used to calculate the transaction's totals, set the new inventory.txt and creates the transaction txt file.
+{
+    const d=new Date();
+    UpdateTotals();
     calc_total.change=calc_total.Calculate_Change().toFixed(2);
     calc_total.saved=calc_total.Calculate_Saved(inventory,cart).toFixed(2);
+    try
+    {
+        
     if(calc_total.change<0) //If change is less than 0 it's because the costumer didn't have enough money to pay the transaction and it won't be completed. An alert will indicate that.
     {
         alert("Not enough money to pay");
@@ -251,8 +250,11 @@ function Checkout() //This function is used to calculate the transaction's total
        
         for(let i=0;i<inventory.length;i++)
         {
-            newinventory+= inventory[i].item+":"+inventory[i].quantity+","+inventory[i].regular_price+","+inventory[i].member_price+","+inventory[i].tax_status+"\n";
-        }
+            if(i<inventory.length-1)
+                newinventory+= inventory[i].item+":"+inventory[i].quantity+","+inventory[i].regular_price+","+inventory[i].member_price+","+inventory[i].tax_status+"\n";
+            else if(i=inventory.length-1)
+                newinventory+= inventory[i].item+":"+inventory[i].quantity+","+inventory[i].regular_price+","+inventory[i].member_price+","+inventory[i].tax_status;
+            }
         output+=d.getMonth()+1+"-"+d.getDate()+"-"+d.getFullYear()+"\n";
         output+="TRANSACTION: 000001 \n";
         output+="ITEM" +Spaces(36)+"QUANTITY"+Spaces(32)+"UNIT PRICE"+Spaces(30)+"TOTAL\n"
@@ -276,11 +278,11 @@ function Checkout() //This function is used to calculate the transaction's total
     }
     SaveFile(newinventory,"inventory");
     SaveFile(output,"Transaction_000001_"+(d.getMonth()+1)+d.getDate()+d.getFullYear());
-    var fs = require('fs');
-    fs.writeFile("inventory.txt",newinventory);
-fs.writeFile("./inventory.txt", newinventory);
-    console.log(newinventory);
-    console.log(output);
+    }
+    catch(e)
+    {
+        alert(e.message);
+    }
 }
 const SaveFile = (content, name) => { //Used to generate txt files.
     const a = document.createElement("a");
@@ -293,6 +295,7 @@ const SaveFile = (content, name) => { //Used to generate txt files.
 }
 try
 {
+    var calc_total=new Total();
     var inventoryobject= new Product(); //Initializes the inventory object.
     var typeofmember; //variable to see if a costumer is a Regular Costumer or a Reward Member.
     var products= TransformTxt(txt) // A string variable which has the inventory.
