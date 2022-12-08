@@ -108,7 +108,7 @@ DeleteCart(nam,price){ //Deletes products in cart
     min="1" max="${cart.quantity}"> <p></p><button onclick="cartobject.DeleteCart('${cart.item}',${cart.price})" class="btn btn-primary"">Delete</button></td></tr>`).join('');
     UpdateTotals();
 }
-EmptyCart() //Deletes all products in cart. However, the transaction is still running with the same costumer.
+EmptyCart() //Deletes all products in cart. However, the transaction is still running with the same customer.
 {
     
     inventory= inventoryobject.AddInventory(products);
@@ -156,9 +156,9 @@ class Total{ //Class for total values in the transaction.
     Calculate_Change(){ //Calculates change.
         return +this.cash- +this.total;
     }
-    Calculate_Saved(inventory,cart) //Calculates saved only on reward members, since they're having a discount. Regular costumers won't see this.
+    Calculate_Saved(inventory,cart) //Calculates saved only on reward members, since they're having a discount. Regular Customers won't see this.
     {
-       //This calculates how much this transactions would've cost if the costumer was a regular one and compares it to the actual amount of the transaction.
+       //This calculates how much this transactions would've cost if the customer was a regular one and compares it to the actual amount of the transaction.
         var saved=0.00;
         for(let i=0;i<cart.length;i++)
         {
@@ -192,12 +192,12 @@ function TransformTxt(text) //Transforms the text into inventory txt into rows s
     .map(l=>l.split(/(?:,|:)+/));
 }
 
-function Choose_Member(id){ //Chooses if the costumer is a Reward Member or a Regular Costumer, so when adding a new product we can get the right price.
+function Choose_Member(id){ //Chooses if the customer is a Reward Member or a Regular Customer, so when adding a new product we can get the right price.
     typeofmember=id;
     if(typeofmember==0)
     {
         document.querySelector('#regular').disabled = true;
-        document.getElementById("costumer").innerHTML='Client is a Reward Member';
+        document.getElementById("customer").innerHTML='Client is a Reward Member';
         document.querySelector("#myTable tbody").innerHTML = inventory.map(invent => `<tr><td>${invent.item}</td><td>${invent.quantity}</td><td>${invent.regular_price}</td><td>${invent.member_price}</td><td>${invent.tax_status}</td><td> <input type="number" id="${invent.item}" name="tentacles"
     min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.member_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('');
 
@@ -206,7 +206,7 @@ function Choose_Member(id){ //Chooses if the costumer is a Reward Member or a Re
     else
     {
         document.querySelector('#reward').disabled = true;
-        document.getElementById("costumer").innerHTML='Client is a Regular Costumer';
+        document.getElementById("customer").innerHTML='Client is a Regular Customer';
         document.querySelector("#myTable tbody").innerHTML = inventory.map(invent => `<tr><td>${invent.item}</td><td>${invent.quantity}</td><td>${invent.regular_price}</td><td>${invent.member_price}</td><td>${invent.tax_status}</td><td> <input type="number" id="${invent.item}" name="tentacles"
     min="0" max="${invent.quantity}"> <p></p><button onclick="cartobject.AddCart('${invent.item}',${invent.regular_price},'${invent.tax_status}')" class="btn btn-primary"">Add to Cart</button></td></tr>`).join('');
     }
@@ -239,7 +239,7 @@ function Checkout() //This function is used to calculate the transaction's total
     try
     {
         
-    if(calc_total.change<0) //If change is less than 0 it's because the costumer didn't have enough money to pay the transaction and it won't be completed. An alert will indicate that.
+    if(calc_total.change<0) //If change is less than 0 it's because the customer didn't have enough money to pay the transaction and it won't be completed. An alert will indicate that.
     {
         alert("Not enough money to pay");
     }
@@ -297,7 +297,7 @@ try
 {
     var calc_total=new Total();
     var inventoryobject= new Product(); //Initializes the inventory object.
-    var typeofmember; //variable to see if a costumer is a Regular Costumer or a Reward Member.
+    var typeofmember; //variable to see if a customer is a Regular Customer or a Reward Member.
     var products= TransformTxt(txt) // A string variable which has the inventory.
     var inventory= inventoryobject.AddInventory(products) //Adds products into the inventory converting them into objects.
     var cartobject=new ProductCart();  //Initializes the cart object.
